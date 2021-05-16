@@ -24,6 +24,16 @@ function post() {
     require('view/frontend/postView.php');
 }
 
+function getComment() {
+
+    $commentManager = new \RomainCarrillo\Blog\Model\CommentManager;
+    
+    $comment = $commentManager->getComment($_GET['commentid']);
+
+    require('view/frontend/commentView.php');
+}
+
+
 function addComment($postId, $author, $comment) {
 
     $commentManager = new RomainCarrillo\Blog\Model\CommentManager;
@@ -39,3 +49,17 @@ function addComment($postId, $author, $comment) {
     require('view/frontend/postView.php');    
 }
 
+function modifyComment($comment, $commentId, $postId) {
+
+    $commentManager = new \RomainCarrillo\Blog\Model\CommentManager;
+
+    $modifiedComment = $commentManager->modifyComment($comment, $commentId);
+
+    if ($modifiedComment === false) {
+        throw new Exception('Impossible de modifier ce commentaire.');
+    } else {
+        header('location: index.php?action=post&id=' . $postId);
+    }
+
+    require('view/frontend/postView.php');
+}
